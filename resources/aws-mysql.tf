@@ -7,6 +7,15 @@ resource "aws_db_subnet_group" "main" {
   }, local.tags)
 }
 
+resource "aws_db_subnet_group" "replica" {
+  name       = "dbsubnetgroup-mysql-${terraform.workspace}"
+  subnet_ids = values(aws_subnet.private).*.id
+
+  tags = merge({
+    Name = "dbsubnetgroup-mysql-${terraform.workspace}"
+  }, local.tags)
+}
+
 resource "aws_db_instance" "main" {
   allocated_storage        = local.rds.disk_size
   backup_retention_period  = terraform.workspace == "prd" ? 30 : 7
@@ -41,7 +50,7 @@ resource "aws_db_instance" "replica" {
 
   allocated_storage        = local.rds.disk_size
   backup_retention_period  = terraform.workspace == "prd" ? 30 : 7
-  db_subnet_group_name     = aws_db_subnet_group.main.name
+  db_subnet_group_name     = aws_db_subnet_group.replica.name
   identifier               = "rds-mysqlreplica-${terraform.workspace}"
   instance_class           = "db.t3.micro"
   publicly_accessible      = false
