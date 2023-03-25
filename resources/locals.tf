@@ -13,14 +13,13 @@ locals {
 */
 
   web_instances = {
-    count = 5
-    ami_id = data.aws_ami.ubuntu.image_id
-    disk_size = 20
-    instance_type = "t3.micro"
-    sg_ids = [aws_security_group.main["web_instances"].id]
-    public_subnet = true
-    storage_type = "gp3"
-    user_data = <<EOF
+    count          = 5
+    ami_id         = data.aws_ami.ubuntu.image_id
+    disk_size      = 20
+    instance_type  = "t3.micro"
+    sg_ids         = [aws_security_group.main["web_instances"].id]
+    public_subnet  = true
+    user_data      = <<EOF
     # instalar httpd
 
     sudo apt update -y
@@ -45,8 +44,8 @@ locals {
 */
 
   backend_instances = {
-    count = 5
-    ami_id = data.aws_ami.linux2.image_id
+    count     = 5
+    ami_id    = data.aws_ami.linux2.image_id
     disk_size = {
       dev = 10
       hom = 20
@@ -54,10 +53,9 @@ locals {
     }[terraform.workspace]
 
     instance_type = "t3.micro"
-    sg_ids = [aws_security_group.main["web_instances"].id]
+    sg_ids        = [aws_security_group.main["web_instances"].id]
     public_subnet = false
-    storage_type = "gp3"
-    user_data = <<EOF
+    user_data     = <<EOF
     # instalar
     #  nginx
     #  mysql-client
@@ -94,6 +92,6 @@ Banco de Dados:
     }[terraform.workspace]
 
     autoscaling_storage = terraform.workspace == "prd"
-    multi_az = terraform.workspace == "prd"
+    multi_az            = terraform.workspace == "prd"
   }
 }
