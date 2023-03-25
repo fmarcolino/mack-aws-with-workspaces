@@ -1,10 +1,18 @@
 resource "aws_eip" "nat" {
   vpc = true
+
+  tags = merge({
+    Name = "eip-nat-${terraform.workspace}"
+  }, local.tags)
 }
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = values(aws_subnet.public)[0].id
+
+  tags = merge({
+    Name = "natgateway-${terraform.workspace}"
+  }, local.tags)
 }
 
 resource "aws_route_table" "private" {
@@ -29,9 +37,9 @@ resource "aws_subnet" "private" {
   availability_zone       = each.key
   map_public_ip_on_launch = false
 
-  tags = {
+  tags = merge({
     Name = "subnet-private_${each.value + 1}-${terraform.workspace}"
-  }
+  }, local.tags)
 }
 
 resource "aws_route_table_association" "private" {

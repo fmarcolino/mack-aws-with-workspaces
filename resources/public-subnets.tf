@@ -1,5 +1,9 @@
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
+
+  tags = merge({
+    Name = "netgateway-${terraform.workspace}"
+  }, local.tags)
 }
 
 resource "aws_route_table" "public" {
@@ -18,9 +22,9 @@ resource "aws_subnet" "public" {
   availability_zone       = each.key
   map_public_ip_on_launch = true
 
-  tags = {
+  tags = merge({
     Name = "subnet-public_${each.value + 1}-${terraform.workspace}"
-  }
+  }, local.tags)
 }
 
 resource "aws_route_table_association" "public" {

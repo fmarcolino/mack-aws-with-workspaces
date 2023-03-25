@@ -89,4 +89,10 @@ Banco de Dados:
     autoscaling_storage = terraform.workspace == "prd"
     multi_az            = terraform.workspace == "prd"
   }
+
+  tags = {
+    Tribe   = "mackenzie"
+    Team    = "devops"
+    Project = var.project
+  }
 }

@@ -17,9 +17,9 @@ resource "aws_instance" "web_instances" {
     delete_on_termination = true
   }
 
-  tags = {
+  tags = merge({
     Name = "ec2-web_${count.index + 1}-${terraform.workspace}"
-  }
+  }, local.tags)
 }
 
 resource "aws_instance" "backend_instances" {
@@ -41,7 +41,7 @@ resource "aws_instance" "backend_instances" {
     delete_on_termination = true
   }
 
-  tags = {
+  tags = merge({
     Name = "ec2-backend_${count.index + 1}-${terraform.workspace}"
-  }
+  }, local.tags)
 }

@@ -2,9 +2,9 @@ resource "aws_db_subnet_group" "main" {
   name       = "mydb"
   subnet_ids = values(aws_subnet.private).*.id
 
-  tags = {
-    Name = "rds-subnetgroup-${terraform.workspace}"
-  }
+  tags = merge({
+    Name = "dbsubnetgroup-mysql-${terraform.workspace}"
+  }, local.tags)
 }
 
 resource "aws_db_instance" "main" {
@@ -30,6 +30,10 @@ resource "aws_db_instance" "main" {
 
   skip_final_snapshot        = true
   max_allocated_storage = terraform.workspace == "prd" ? local.rds.disk_size * 100 : 0
+
+  tags = merge({
+    Name = "rds-mysql-${terraform.workspace}"
+  }, local.tags)
 }
 
 resource "aws_db_instance" "replica" {
@@ -52,4 +56,8 @@ resource "aws_db_instance" "replica" {
 
   skip_final_snapshot = true
   max_allocated_storage = local.rds.disk_size * 100
+
+  tags = merge({
+    Name = "rds-mysqlreplica-${terraform.workspace}"
+  }, local.tags)
 }
