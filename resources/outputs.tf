@@ -7,7 +7,7 @@ output "tls_private_key" {
 output "instance_ips" {
   value = {
     web_instances = aws_instance.web_instances.*.public_ip
-    backend_instances = aws_instance.backend_instances.*.public_ip
+    backend_instances = aws_instance.backend_instances.*.private_ip
   }
 }
 
