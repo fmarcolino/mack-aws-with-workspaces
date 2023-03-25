@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "mydb"
+  name       = "dbsubnetgroup-mysql-${terraform.workspace}"
   subnet_ids = values(aws_subnet.private).*.id
 
   tags = merge({
