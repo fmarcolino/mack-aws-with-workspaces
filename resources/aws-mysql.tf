@@ -27,6 +27,9 @@ resource "aws_db_instance" "main" {
   vpc_security_group_ids   = [aws_security_group.main["database"].id]
 
   auto_minor_version_upgrade = false
+
+  skip_final_snapshot        = true
+  max_allocated_storage = terraform.workspace == "prd" ? local.rds.disk_size * 100 : 0
 }
 
 resource "aws_db_instance" "replica" {
@@ -46,4 +49,7 @@ resource "aws_db_instance" "replica" {
 
   replicate_source_db        = aws_db_instance.main.id
   auto_minor_version_upgrade = false
+
+  skip_final_snapshot = true
+  max_allocated_storage = local.rds.disk_size * 100
 }
