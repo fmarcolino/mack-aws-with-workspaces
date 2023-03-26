@@ -12,7 +12,10 @@ output "instance_ips" {
 }
 
 output "database_url" {
-  value = aws_db_instance.main.address
+  value = {
+    main = aws_db_instance.main.address
+    replica = try(aws_db_instance.replica[0].address, "")
+  }
 }
 
 output "vpc_id" {
