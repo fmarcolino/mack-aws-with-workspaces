@@ -24,7 +24,7 @@ resource "aws_db_instance" "main" {
   username                 = "mydb"
   backup_window            = "22:00-23:00"
   maintenance_window       = "Sat:00:00-Sat:03:00"
-  vpc_security_group_ids   = [aws_security_group.main["database"].id]
+  vpc_security_group_ids   = [aws_security_group.database.id]
 
   auto_minor_version_upgrade = false
 
@@ -47,7 +47,7 @@ resource "aws_db_instance" "replica" {
   storage_type             = "gp2"
   backup_window            = "22:00-23:00"
   maintenance_window       = "Sat:00:00-Sat:03:00"
-  vpc_security_group_ids   = [aws_security_group.main["database"].id]
+  vpc_security_group_ids   = [aws_security_group.database.id]
 
   replicate_source_db        = aws_db_instance.main.id
   auto_minor_version_upgrade = false

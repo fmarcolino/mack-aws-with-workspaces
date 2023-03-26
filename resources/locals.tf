@@ -17,7 +17,7 @@ locals {
     ami_id         = data.aws_ami.ubuntu.image_id
     disk_size      = 20
     instance_type  = "t3.micro"
-    sg_ids         = [aws_security_group.main["web_instances"].id]
+    sg_ids         = [aws_security_group.main.id]
     public_subnet  = true
     user_data      = join("\n", [
       "#!/bin/bash",
@@ -51,7 +51,7 @@ locals {
     }[terraform.workspace]
 
     instance_type = "t3.micro"
-    sg_ids        = [aws_security_group.main["web_instances"].id]
+    sg_ids        = [aws_security_group.main.id]
     public_subnet = false
     user_data     = join("\n", [
       "#!/bin/bash",
