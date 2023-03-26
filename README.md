@@ -64,3 +64,52 @@ Criar um módulo terraform que crie de forma dinâmica:
         1 Instancia de Replica de Leitura (Apenas para ambiente Produtivo)
 
 Subir no Github e passar endereço para: william.loliveira@hotmail.com
+
+
+# Execução
+
+```sh
+# inicialização do projeto
+terraform init
+
+# criação de workspaces
+terraform workspace new dev
+terraform workspace new hom
+terraform workspace new prd
+
+# seleção de determinado workspace antes de aplicar o terraform
+terraform workspace select dev
+terraform workspace select hom
+terraform workspace select prd
+
+# criação de infraestrutura para cada 
+terraform init
+terraform plan
+terraform apply
+
+# guardar o output gerado com os ips e dns das instâncias
+
+# no seu computador (ou no navegador)
+curl <ip público output web_instances>
+
+# obter a chave ssh das máquinas
+terraform output -raw region_1_tls_private_key > id_rsa
+chmod 600 id_rsa
+
+# entrar na máquina pública (ubuntu)
+ssh -i id_rsa ubuntu@<ip público output web_instances>
+
+# testar com o curl a resposta do nginx dos backends a partir das web instances
+curl <ip privado output backend_instances>
+
+# dentro de alguma máquina web instance entrar nas máquinas backend (amazon linux 2)
+ssh -i id_rsa ec2-user@<ip privado output backend_instances>
+
+# testar a conexão com o db main nas máquinas backend
+mysql -h rds-mysql-prd.cwdvqhiwmtvk.us-east-1.rds.amazonaws.com --database=mydb -u mydb --password=admin123
+
+# testar a conexão com o db replica (prd somente) nas máquinas backend
+mysql -h rds-mysql-prd.cwdvqhiwmtvk.us-east-1.rds.amazonaws.com --database=mydb -u mydb --password=admin123
+
+# fim!
+```
